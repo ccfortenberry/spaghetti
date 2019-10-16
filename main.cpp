@@ -121,7 +121,7 @@ int main() {
 		
 		try {
 			//Noodle(39).getVal() == testBox[0].getVal();
-			compNoodle.getVal() == testBox.getNoodleAt(0).getVal();
+			if (compNoodle.getVal() != testBox.getNoodleAt(0).getVal()) throw std::runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -141,7 +141,7 @@ int main() {
 		testBox.insertNoodle(Noodle(39));
 		
 		try {
-			39 == testBox.getNoodleAt(0).getVal();
+			if (testBox.getNoodleAt(0).getVal() != 39) throw std::runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -161,7 +161,7 @@ int main() {
 		testBox.insertNoodle(Noodle(39));
 		
 		try {
-			testBox[0] == 39;
+			if (testBox[0] != 39) throw std::runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
