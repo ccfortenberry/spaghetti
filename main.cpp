@@ -10,6 +10,8 @@ using spaghet::NoodleBox;
 // iostream included in header
 using std::cout;
 using std::endl;
+// vector included in header
+using std::vector;
 #include <exception>
 using std::exception;
 
@@ -112,6 +114,23 @@ int main() {
 	cout << endl;
 	
 	{
+		cout << "Testing the insertion of a Noodle into a Box, with initializer list..." << endl;
+		
+		try {
+			NoodleBox testBox = {39, 42, 69, 100};
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical Noodle Insertion Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully inserted a Noodle into a Box!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
 		cout << "Testing the lookup of a Noodle in a Box..." << endl;
 		
 		Noodle testNoodle(39);
@@ -157,11 +176,13 @@ int main() {
 	{
 		cout << "Testing the lookup of a Noodle in a Box, but with operator[]..." << endl;
 		
-		NoodleBox testBox;
-		testBox.insertNoodle(Noodle(39));
+		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
+		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		
 		try {
-			if (testBox[0] != 39) throw std::runtime_error("Values are not equal when they should be!");
+			for (unsigned int i=0; i<noodles.size(); i++) {
+				if (noodles[i] != testBox[i]) throw std::runtime_error("Values are not equal when they should be!");
+			}
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -169,8 +190,10 @@ int main() {
 			return 1;
 		}
 		
-		cout << "Successfully found a Noodle in a Box!" << endl;
+		cout << "Successfully found all Noodles in a Box!" << endl;
 	}
+	
+	
 	
 	return 0;
 }

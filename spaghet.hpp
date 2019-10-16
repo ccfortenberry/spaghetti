@@ -7,6 +7,7 @@
 #define SPAGHET_INCLUDED
 
 #include <iostream>
+#include <initializer_list>
 #include <memory>
 #include <vector> // May need to take away this so it can
                   // have its own functionality, someday
@@ -48,6 +49,14 @@ namespace spaghet {
 	class NoodleBox {
 		public:
 			NoodleBox()=default;
+			
+			NoodleBox(const std::initializer_list<int> & initList) {
+				for (auto i : initList) {
+					this->insertNoodle(Noodle(i));
+				}
+			}
+			// copy & move ctor
+			// copy & move assignment
 			
 			Noodle getTallest() {
 				return _noodleVec[_idxOfTallest];
