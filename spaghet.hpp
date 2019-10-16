@@ -20,6 +20,11 @@ namespace spaghet {
 		public:
 			Noodle()=default;
 			
+			Noodle(const int & val):_val(val), _distFromTallest(-1) {
+				// Calculate new noodle distance from the tallest
+				// This will be done in the box and updated accordingly
+			}
+			
 			int getVal() {
 				return _val;
 			}
@@ -58,16 +63,31 @@ namespace spaghet {
 				_idxOfTallest = idxOfTallest;
 			}
 			
+			// allow insert by a value instead of a raw noodle?
+			
 			void insertNoodle(const Noodle & noodle) {
 				_noodleVec.push_back(noodle);
+				// Adjust elements to accurately have
+				// distance from the tallest noodle
 			}
 			
 			void insertNoodle(Noodle && noodle) {
 				_noodleVec.push_back(noodle);
+				// Adjust elements to accurately have
+				// distance from the tallest noodle
+			}
+			
+			int operator[](const unsigned int & index) {
+				return _noodleVec[index].getVal();
+			}
+			
+			Noodle getNoodleAt(const unsigned int & index) {
+				return _noodleVec[index];
 			}
 			
 			void removeNoodle(const unsigned int & noodleIdx) {
 				_noodleVec.erase(_noodleVec.begin()+noodleIdx);
+				// Adjust elements to have accurate distFromTallest
 			}
 		private:
 			//std::vector<std::unique_ptr<Noodle>> _noodleVec; taking references to noodles instead of noodle
