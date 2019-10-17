@@ -18,16 +18,17 @@ namespace spaghet {
 		std::cout << "Somebody toucha my spaghet!" << std::endl;
 	}
 	
+	template <class T>
 	class Noodle {
 		public:
-			Noodle()=default;
+			Noodle():_val(0), _distFromTallest(-1) {};
 			
-			Noodle(const int & val):_val(val) {
+			Noodle(const T & val):_val(val), _distFromTallest(-1) {
 				// Calculate new noodle distance from the tallest
 				// This will be done in the box and updated accordingly
 			}
 			
-			int getVal() const {
+			T getVal() const {
 				return _val;
 			}
 			
@@ -35,7 +36,7 @@ namespace spaghet {
 				return _distFromTallest;
 			}
 			
-			void setVal(int val) {
+			void setVal(T val) {
 				_val = val;
 			}
 			
@@ -43,24 +44,32 @@ namespace spaghet {
 				_distFromTallest = distFromTallest;
 			}
 		private:
-			int _val = 0;
-			int _distFromTallest = -1;
+			T _val;
+			int _distFromTallest;
 	};
 	
+	template <class T>
 	class NoodleBox {
 		public:
-			NoodleBox()=default;
+			NoodleBox():_noodleVec(), _idxOfTallest(0) {};
 			
-			// Template for abstract types?
-			NoodleBox(const std::initializer_list<int> & initList) {
-				for (auto i : initList) {
-					insertNoodle(Noodle(i));
+			NoodleBox(const std::initializer_list<T> & list) {
+				for (auto i : list) {
+					insertNoodle(Noodle<T>(i));
 				}
 			}
+			
+			/* template <template <class> class AT>
+			NoodleBox(const AT<T> & list) {
+				for (auto i=list.begin(); i!=list.end(); i++) {
+					insertNoodle(Noodle<T>(i));
+				}
+			} */
+			
 			// copy & move ctor
 			// copy & move assignment
 			
-			Noodle getTallest() const {
+			Noodle<T> getTallest() const {
 				return _noodleVec[_idxOfTallest];
 			}
 			
@@ -70,9 +79,9 @@ namespace spaghet {
 			
 			//void setTallest();
 			
-			void setIdxOfTallest(int idxOfTallest) {
+			/* void setIdxOfTallest(int idxOfTallest) {
 				_idxOfTallest = idxOfTallest;
-			}
+			} */
 			
 			// allow insert by a value instead of a raw noodle?
 			
@@ -80,7 +89,7 @@ namespace spaghet {
 				return _noodleVec.size();
 			}
 			
-			void insertNoodle(const Noodle & noodle) {
+			void insertNoodle(const Noodle<T> & noodle) {
 				_noodleVec.push_back(noodle);
 				
 				for (unsigned int i=0; i<_noodleVec.size(); i++) {
@@ -94,7 +103,7 @@ namespace spaghet {
 				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
-			void insertNoodle(Noodle && noodle) {
+			void insertNoodle(Noodle<T> && noodle) {
 				_noodleVec.push_back(noodle);
 				
 				for (unsigned int i=0; i<_noodleVec.size(); i++) {
@@ -108,11 +117,11 @@ namespace spaghet {
 				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
-			Noodle getNoodleAt(const unsigned int & index) {
+			Noodle<T> getNoodleAt(const unsigned int & index) {
 				return _noodleVec[index];
 			}
 			
-			int operator[](const unsigned int & index) {
+			T operator[](const unsigned int & index) {
 				return _noodleVec[index].getVal();
 			}
 			
@@ -124,18 +133,19 @@ namespace spaghet {
 			//std::vector<std::unique_ptr<Noodle>> _noodleVec; taking references to noodles instead of noodle
 			//objects as an optimization. But would we want to have a box of noodles that only contain the
 			//locations of noodles instead of actual noodles themselves? sounds unappetizing to me...
-			std::vector<Noodle> _noodleVec;
-			unsigned int _idxOfTallest = 0;
-			
-			void incDistFromTallest(const unsigned int & ignore) {
-				for (unsigned int i=0; i<_noodleVec.size(); i++) 
-					if (i != ignore) _noodleVec[i].setDistFromTallest(_noodleVec[i].getDistFromTallest()+1);
-			}
-			
-			void decDistFromTallest() {
-				for (auto i : _noodleVec) i.setDistFromTallest(i.getDistFromTallest()-1);
-			}
+			std::vector<Noodle<T>> _noodleVec;
+			unsigned int _idxOfTallest;
 	};
+	
+	template <typename T>
+	void sort(const NoodleBox<T> & b) {
+		
+	}
+	
+	template <typename RAIter>
+	void sort(RAIter first, RAIter last) {
+		
+	}
 }
 
 #endif //SPAGHET_INCLUDED

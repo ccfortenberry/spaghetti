@@ -29,7 +29,7 @@ int main() {
 		cout << "Testing default Noodle creation..." << endl;
 		
 		try {
-			Noodle testNoodle;
+			Noodle<int> testNoodle;
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -46,7 +46,7 @@ int main() {
 		cout << "Testing Noodle creation by value..." << endl;
 		
 		try {
-			Noodle testNoodle(39);
+			Noodle<int> testNoodle(39);
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -62,7 +62,7 @@ int main() {
 	{
 		cout << "Testing Noodle distance from tallest..." << endl;
 		
-		Noodle testNood(39);
+		Noodle<int> testNood(39);
 		testNood.setDistFromTallest(39);
 		
 		try {
@@ -83,7 +83,7 @@ int main() {
 		cout << "Testing default NoodleBox creation..." << endl;
 		
 		try {
-			NoodleBox test;
+			NoodleBox<int> test;
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -99,8 +99,8 @@ int main() {
 	{
 		cout << "Testing the insertion of a Noodle into a Box..." << endl;
 		
-		Noodle testNood(39);
-		NoodleBox testBox;
+		Noodle<int> testNood(39);
+		NoodleBox<int> testBox;
 		
 		try {
 			testBox.insertNoodle(testNood);
@@ -119,7 +119,7 @@ int main() {
 	{
 		cout << "Testing the insertion of a Noodle rvalue into a Box..." << endl;
 		
-		NoodleBox testBox;
+		NoodleBox<int> testBox;
 		
 		try {
 			testBox.insertNoodle(Noodle(39));
@@ -139,7 +139,7 @@ int main() {
 		cout << "Testing the insertion of a Noodle into a Box, with initializer list..." << endl;
 		
 		try {
-			NoodleBox testBox = {39, 42, 69, 100};
+			NoodleBox<int> testBox = {39, 42, 69, 100};
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -155,9 +155,9 @@ int main() {
 	{
 		cout << "Testing the lookup of a Noodle in a Box..." << endl;
 		
-		Noodle testNoodle(39);
-		Noodle compNoodle(39);
-		NoodleBox testBox;
+		Noodle<int> testNoodle(39);
+		Noodle<int> compNoodle(39);
+		NoodleBox<int> testBox;
 		testBox.insertNoodle(testNoodle);
 		
 		try {
@@ -178,7 +178,7 @@ int main() {
 	{
 		cout << "Testing the lookup of a Noodle in a Box, but with rvalues..." << endl;
 		
-		NoodleBox testBox;
+		NoodleBox<int> testBox;
 		testBox.insertNoodle(Noodle(39));
 		
 		try {
@@ -199,7 +199,7 @@ int main() {
 		cout << "Testing the lookup of a Noodle in a Box, but with operator[]..." << endl;
 		
 		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
-		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
+		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
@@ -220,7 +220,7 @@ int main() {
 	{
 		cout << "Testing to make sure that the distance of a noodle is correctly set..." << endl;
 		
-		NoodleBox testBox = {10}; // = noodles;
+		NoodleBox<int> testBox = {10}; // = noodles;
 		
 		try {
 			if (testBox.getNoodleAt(0).getDistFromTallest() != 0) throw runtime_error("Values are not equal when they should be!");
@@ -244,7 +244,7 @@ int main() {
 		
 		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		vector<int> noodmax = {8, 7, 6, 3, 2, 1, 0, 4, 5};
-		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
@@ -272,7 +272,7 @@ int main() {
 		cout << "Testing to make sure that the index of the tallest noodle is correct..." << endl;
 		
 		unsigned int tallest = 6;
-		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
 		
 		try {
 			if (testBox.getIdxOfTallest() != tallest) throw runtime_error("Values are not equal when they should be!");
@@ -289,7 +289,28 @@ int main() {
 	
 	cout << endl;
 	
-	cout << "All tests passed!" << endl;
+	{
+		cout << "Testing to make sure that the index of the tallest noodle is correct, but with floats!..." << endl;
+		
+		unsigned int tallest = 3;
+		NoodleBox<float> testBox = {10.2, 6.8, 15.04, 22.9, 4.4}; // = noodles;
+		
+		try {
+			if (testBox.getIdxOfTallest() != tallest) throw runtime_error("Values are not equal when they should be!");
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical tallest noodle index Failure!!" << endl;
+			cout << testBox.getIdxOfTallest() << " != " << tallest << endl;
+			return 1;
+		}
+		
+		cout << "Successfully verified the index of the tallest float noodle!!" << endl;
+	}
+	
+	cout << endl;
+	
+	cout << "_____________________________________\nAll tests passed!" << endl;
 	
 	return 0;
 }
