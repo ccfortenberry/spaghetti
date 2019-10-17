@@ -7,6 +7,7 @@
 #define SPAGHET_INCLUDED
 
 #include <iostream>
+#include <cstddef>
 #include <initializer_list>
 #include <memory>
 #include <vector> // May need to take away this so it can
@@ -21,16 +22,16 @@ namespace spaghet {
 		public:
 			Noodle()=default;
 			
-			Noodle(const int & val):_val(val), _distFromTallest(-1) {
+			Noodle(const int & val):_val(val) {
 				// Calculate new noodle distance from the tallest
 				// This will be done in the box and updated accordingly
 			}
 			
-			int getVal() {
+			int getVal() const {
 				return _val;
 			}
 			
-			int getDistFromTallest() {
+			int getDistFromTallest() const {
 				return _distFromTallest;
 			}
 			
@@ -38,31 +39,32 @@ namespace spaghet {
 				_val = val;
 			}
 			
-			void setDistFromTallest(int distFromTallest) {
+			void setDistFromTallest(const int & distFromTallest) {
 				_distFromTallest = distFromTallest;
 			}
 		private:
-			int _val;
-			int _distFromTallest;
+			int _val = 0;
+			int _distFromTallest = -1;
 	};
 	
 	class NoodleBox {
 		public:
 			NoodleBox()=default;
 			
+			// Template for abstract types?
 			NoodleBox(const std::initializer_list<int> & initList) {
 				for (auto i : initList) {
-					this->insertNoodle(Noodle(i));
+					insertNoodle(Noodle(i));
 				}
 			}
 			// copy & move ctor
 			// copy & move assignment
 			
-			Noodle getTallest() {
+			Noodle getTallest() const {
 				return _noodleVec[_idxOfTallest];
 			}
 			
-			int getIdxOfTallest() {
+			unsigned int getIdxOfTallest() const {
 				return _idxOfTallest;
 			}
 			
@@ -74,24 +76,44 @@ namespace spaghet {
 			
 			// allow insert by a value instead of a raw noodle?
 			
+			std::size_t size() {
+				return _noodleVec.size();
+			}
+			
 			void insertNoodle(const Noodle & noodle) {
 				_noodleVec.push_back(noodle);
-				// Adjust elements to accurately have
-				// distance from the tallest noodle
+				
+				for (unsigned int i=0; i<_noodleVec.size(); i++) {
+					if (_noodleVec[size()-1].getVal() > _noodleVec[i].getVal()) {
+						_noodleVec[i].setDistFromTallest(_noodleVec[i].getDistFromTallest()+1);
+					}
+					else {
+						_noodleVec[size()-1].setDistFromTallest(_noodleVec[size()-1].getDistFromTallest()+1);
+					}
+				}
+				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
 			void insertNoodle(Noodle && noodle) {
 				_noodleVec.push_back(noodle);
-				// Adjust elements to accurately have
-				// distance from the tallest noodle
-			}
-			
-			int operator[](const unsigned int & index) {
-				return _noodleVec[index].getVal();
+				
+				for (unsigned int i=0; i<_noodleVec.size(); i++) {
+					if (_noodleVec[size()-1].getVal() > _noodleVec[i].getVal()) {
+						_noodleVec[i].setDistFromTallest(_noodleVec[i].getDistFromTallest()+1);
+					}
+					else {
+						_noodleVec[size()-1].setDistFromTallest(_noodleVec[size()-1].getDistFromTallest()+1);
+					}
+				}
+				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
 			Noodle getNoodleAt(const unsigned int & index) {
 				return _noodleVec[index];
+			}
+			
+			int operator[](const unsigned int & index) {
+				return _noodleVec[index].getVal();
 			}
 			
 			void removeNoodle(const unsigned int & noodleIdx) {
@@ -103,7 +125,16 @@ namespace spaghet {
 			//objects as an optimization. But would we want to have a box of noodles that only contain the
 			//locations of noodles instead of actual noodles themselves? sounds unappetizing to me...
 			std::vector<Noodle> _noodleVec;
-			int _idxOfTallest;
+			unsigned int _idxOfTallest = 0;
+			
+			void incDistFromTallest(const unsigned int & ignore) {
+				for (unsigned int i=0; i<_noodleVec.size(); i++) 
+					if (i != ignore) _noodleVec[i].setDistFromTallest(_noodleVec[i].getDistFromTallest()+1);
+			}
+			
+			void decDistFromTallest() {
+				for (auto i : _noodleVec) i.setDistFromTallest(i.getDistFromTallest()-1);
+			}
 	};
 }
 

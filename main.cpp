@@ -14,9 +14,11 @@ using std::endl;
 using std::vector;
 #include <exception>
 using std::exception;
+using std::runtime_error;
 
 int main() {
 	{
+		cout << "Begin lemon testing to ensure basic functionality:\n_____________________________________" << endl;
 		cout << "Testing namespace as a lemon test" << endl;
 		spaghet::printmeme();
 	}
@@ -53,6 +55,26 @@ int main() {
 		}
 		
 		cout << "Successfully created a Noodle with a value!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing Noodle distance from tallest..." << endl;
+		
+		Noodle testNood(39);
+		testNood.setDistFromTallest(39);
+		
+		try {
+			if (testNood.getDistFromTallest() != 39) throw runtime_error("Values are not equal when they should be!");
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical Noodle by value Failure!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully tested noodle distance from tallest!" << endl;
 	}
 	
 	cout << endl;
@@ -140,7 +162,7 @@ int main() {
 		
 		try {
 			//Noodle(39).getVal() == testBox[0].getVal();
-			if (compNoodle.getVal() != testBox.getNoodleAt(0).getVal()) throw std::runtime_error("Values are not equal when they should be!");
+			if (compNoodle.getVal() != testBox.getNoodleAt(0).getVal()) throw runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -160,7 +182,7 @@ int main() {
 		testBox.insertNoodle(Noodle(39));
 		
 		try {
-			if (testBox.getNoodleAt(0).getVal() != 39) throw std::runtime_error("Values are not equal when they should be!");
+			if (testBox.getNoodleAt(0).getVal() != 39) throw runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -181,7 +203,7 @@ int main() {
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
-				if (noodles[i] != testBox[i]) throw std::runtime_error("Values are not equal when they should be!");
+				if (noodles[i] != testBox[i]) throw runtime_error("Values are not equal when they should be!");
 			}
 		}
 		catch (const exception & e) {
@@ -193,7 +215,81 @@ int main() {
 		cout << "Successfully found all Noodles in a Box!" << endl;
 	}
 	
+	cout << endl;
 	
+	{
+		cout << "Testing to make sure that the distance of a noodle is correctly set..." << endl;
+		
+		NoodleBox testBox = {10}; // = noodles;
+		
+		try {
+			if (testBox.getNoodleAt(0).getDistFromTallest() != 0) throw runtime_error("Values are not equal when they should be!");
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical Noodle distance Failure!!" << endl;
+			cout << "(";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ",";
+			cout << ")" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully verified Noodles' length in a Box!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing to make sure that the distances from the longest noodle are correct..." << endl;
+		
+		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
+		vector<int> noodmax = {8, 7, 6, 3, 2, 1, 0, 4, 5};
+		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		
+		try {
+			for (unsigned int i=0; i<noodles.size(); i++) {
+				if (noodmax[i] != testBox.getNoodleAt(i).getDistFromTallest()) throw runtime_error("Values are not equal when they should be!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical Noodle distance Failure!!" << endl;
+			cout << "(";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ","; 
+			cout << ")" << endl;
+			cout << "(";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i] << ","; 
+			cout << ")" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully verified Noodles' length in a Box!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing to make sure that the index of the tallest noodle is correct..." << endl;
+		
+		unsigned int tallest = 6;
+		NoodleBox testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		
+		try {
+			if (testBox.getIdxOfTallest() != tallest) throw runtime_error("Values are not equal when they should be!");
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical tallest noodle index Failure!!" << endl;
+			cout << testBox.getIdxOfTallest() << " != " << tallest << endl;
+			return 1;
+		}
+		
+		cout << "Successfully verified the index of the tallest noodle!!" << endl;
+	}
+	
+	cout << endl;
+	
+	cout << "All tests passed!" << endl;
 	
 	return 0;
 }
