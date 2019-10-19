@@ -5,3 +5,6 @@ A lot of people say that this is just a joke sort that isn't reasonably implemen
 + Time complexity: O(n)
 + Space complexity: O(n) - doesn't need to be in-place
 + Stable: yes
+
+## Todo
+- Fix construction/insertion duplicating data instead of overwriting
