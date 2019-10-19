@@ -12,6 +12,12 @@ using std::cout;
 using std::endl;
 // vector included in header
 using std::vector;
+#include <deque>
+using std::deque;
+#include <list>
+using std::list;
+#include <array>
+using std::array;
 #include <exception>
 using std::exception;
 using std::runtime_error;
@@ -220,7 +226,7 @@ int main() {
 	{
 		cout << "Testing to make sure that the distance of a noodle is correctly set..." << endl;
 		
-		NoodleBox<int> testBox = {10}; // = noodles;
+		NoodleBox<int> testBox = {10};
 		
 		try {
 			if (testBox.getNoodleAt(0).getDistFromTallest() != 0) throw runtime_error("Values are not equal when they should be!");
@@ -244,7 +250,7 @@ int main() {
 		
 		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		vector<int> noodmax = {8, 7, 6, 3, 2, 1, 0, 4, 5};
-		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
@@ -272,7 +278,7 @@ int main() {
 		cout << "Testing to make sure that the index of the tallest noodle is correct..." << endl;
 		
 		unsigned int tallest = 6;
-		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6}; // = noodles;
+		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		
 		try {
 			if (testBox.getIdxOfTallest() != tallest) throw runtime_error("Values are not equal when they should be!");
@@ -293,7 +299,7 @@ int main() {
 		cout << "Testing to make sure that the index of the tallest noodle is correct, but with floats!..." << endl;
 		
 		unsigned int tallest = 3;
-		NoodleBox<float> testBox = {10.2, 6.8, 15.04, 22.9, 4.4}; // = noodles;
+		NoodleBox<float> testBox = {10.2, 6.8, 15.04, 22.9, 4.4};
 		
 		try {
 			if (testBox.getIdxOfTallest() != tallest) throw runtime_error("Values are not equal when they should be!");
@@ -307,6 +313,84 @@ int main() {
 		
 		cout << "Successfully verified the index of the tallest float noodle!!" << endl;
 	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing copying from another container..." << endl;
+		
+		vector<short> vecNood = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+		
+		try {
+			NoodleBox<short> testBox = vecNood;
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical noodle container Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a vector!!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing copying from a double ended queue of negative noodles..." << endl;
+		
+		deque<long> vecNood = {-9, -8, -7, -6, -5, -4, -3, -2, -1, 0};
+		
+		try {
+			NoodleBox<long> testBox(vecNood);
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical noodle container Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a deque!!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing copying from a list of chars..." << endl;
+		
+		list<char> vecNood = {'i', 't', 'a', 'L', 'y'};
+		
+		try {
+			NoodleBox<char> testBox = vecNood;
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical noodle container Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a list!!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing copying from a std::array of chars..." << endl;
+		
+		array<char,5> vecNood = {'i', 't', 'a', 'L', 'y'};
+		
+		try {
+			NoodleBox<char> testBox(vecNood.begin(), vecNood.end());
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Critical noodle container Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a list!!" << endl;
+	}
+	
+	// Test copy and move ctors
 	
 	cout << endl;
 	

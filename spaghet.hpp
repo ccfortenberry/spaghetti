@@ -7,6 +7,7 @@
 #define SPAGHET_INCLUDED
 
 #include <iostream>
+#include <algorithm>
 #include <cstddef>
 #include <initializer_list>
 #include <memory>
@@ -53,21 +54,65 @@ namespace spaghet {
 		public:
 			NoodleBox():_noodleVec(), _idxOfTallest(0) {};
 			
-			NoodleBox(const std::initializer_list<T> & list) {
+			NoodleBox(const std::initializer_list<T> & list):_idxOfTallest(0) {
 				for (auto i : list) {
 					insertNoodle(Noodle<T>(i));
 				}
 			}
 			
-			/* template <template <class> class AT>
-			NoodleBox(const AT<T> & list) {
-				for (auto i=list.begin(); i!=list.end(); i++) {
-					insertNoodle(Noodle<T>(i));
-				}
-			} */
+			template <typename Iter>
+			NoodleBox(Iter first, Iter last):_idxOfTallest(0) {
+				for (auto f=first; f!=last; f++)
+					insertNoodle(Noodle<T>(*f));
+			}
 			
-			// copy & move ctor
-			// copy & move assignment
+			template <template <typename> class AT>
+			NoodleBox(const AT<T> & list):_idxOfTallest(0) {
+				*this = list;
+			}
+			
+			template <template <typename> class AT>
+			NoodleBox(AT<T> && list):_idxOfTallest(0) {
+				*this = std::move(list);
+			}
+			
+			template <template <typename> class AT>
+			void operator=(const AT<T> & list) {
+				for (auto i=list.begin(); i!=list.end(); i++) {
+					insertNoodle(Noodle<T>(*i));
+				}
+			}
+			
+			template <template <typename> class AT>
+			void operator=(AT<T> && list) {
+				for (auto i=list.begin(); i!=list.end(); i++) {
+					insertNoodle(Noodle<T>(*i));
+				}
+			}
+			
+			NoodleBox(const NoodleBox<T> & other) {
+				*this = other;
+			}
+			
+			NoodleBox(NoodleBox<T> && other) {
+				*this = std::move(other);
+			}
+			
+			void operator=(const NoodleBox & other) {
+				for (auto i=0; i<other.size(); i++) {
+					_noodleVec[i] = other[i];
+				}
+				_idxOfTallest = other.getIdxOfTallest();
+			}
+			
+			void operator=(NoodleBox<T> && other) {
+				for (auto i=0; i<other.size(); i++) {
+					_noodleVec[i] = std::move(other[i]);
+				}
+				_idxOfTallest = std::move(other.getIdxOfTallest());
+			}
+			
+			~NoodleBox()=default;
 			
 			Noodle<T> getTallest() const {
 				return _noodleVec[_idxOfTallest];
@@ -105,7 +150,6 @@ namespace spaghet {
 			
 			void insertNoodle(Noodle<T> && noodle) {
 				_noodleVec.push_back(noodle);
-				
 				for (unsigned int i=0; i<_noodleVec.size(); i++) {
 					if (_noodleVec[size()-1].getVal() > _noodleVec[i].getVal()) {
 						_noodleVec[i].setDistFromTallest(_noodleVec[i].getDistFromTallest()+1);
