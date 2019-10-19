@@ -1,3 +1,6 @@
 # no exe for you
 *.exe
 *.out
+
+# no batch file for you either
+*.bat
