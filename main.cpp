@@ -21,6 +21,8 @@ using std::array;
 #include <exception>
 using std::exception;
 using std::runtime_error;
+#include <algorithm>
+// for std::sort;
 
 int main() {
 	{
@@ -69,7 +71,7 @@ int main() {
 		cout << "Testing Noodle distance from tallest..." << endl;
 		
 		Noodle<int> testNood(39);
-		testNood.setDistFromTallest(39);
+		testNood._distFromTallest = 39;
 		
 		try {
 			if (testNood.getDistFromTallest() != 39) throw runtime_error("Values are not equal when they should be!");
@@ -248,9 +250,9 @@ int main() {
 	{
 		cout << "Testing to make sure that the distances from the longest noodle are correct..." << endl;
 		
-		vector<int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
-		vector<int> noodmax = {8, 7, 6, 3, 2, 1, 0, 4, 5};
-		NoodleBox<int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
+		vector<unsigned int> noodles = {1, 2, 5, 18, 22, 39, 42, 15, 6};
+		vector<unsigned int> noodmax = {8, 7, 6, 3, 2, 1, 0, 4, 5};
+		NoodleBox<unsigned int> testBox = {1, 2, 5, 18, 22, 39, 42, 15, 6};
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
@@ -384,6 +386,82 @@ int main() {
 		catch (const exception & e) {
 			cout << e.what() << endl;
 			cout << "Critical noodle container Failure!!" << endl;
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a list!!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing sort..." << endl;
+		
+		array<int,5> vecNood = {40, 20, 50, 30, 10};
+		NoodleBox<int> testBox(vecNood.begin(), vecNood.end());
+		
+		cout << "Start: ";
+		for (auto i : vecNood) cout << i << ", ";
+		cout << endl << "Start: ";
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i] << ", ";
+		cout << endl << "Dist: ";
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ", ";
+		cout << endl;
+		
+		std::sort(vecNood.begin(), vecNood.end());
+		spaghet::sort(testBox);
+		
+		try {
+			for(unsigned int i=0; i<testBox.size(); i++) {
+				if (vecNood[i] != testBox[i]) throw runtime_error("sorting Failure!!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Desired: ";
+			for (auto i : vecNood) cout << i << ", ";
+			cout << endl << "Result: ";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i] << ", ";
+			cout << endl;
+			
+			return 1;
+		}
+		
+		cout << "Successfully created noodles from a list!!" << endl;
+	}
+	
+	cout << endl;
+	
+	{
+		cout << "Testing sort..." << endl;
+		
+		array<char,5> vecNood = {'i', 't', 'a', 'L', 'y'};
+		NoodleBox<char> testBox(vecNood.begin(), vecNood.end());
+		
+		cout << "Start: ";
+		for (auto i : vecNood) cout << i;
+		cout << endl << "Start: ";
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i];
+		cout << endl << "Dist: ";
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest();
+		cout << endl;
+		
+		std::sort(vecNood.begin(), vecNood.end());
+		spaghet::sort(testBox);
+		
+		try {
+			for(unsigned int i=0; i<testBox.size(); i++) {
+				if (vecNood[i] != testBox[i]) throw runtime_error("sorting Failure!!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			cout << "Desired: ";
+			for (auto i : vecNood) cout << i;
+			cout << endl << "Result: ";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i];
+			cout << endl;
+			
 			return 1;
 		}
 		
