@@ -71,10 +71,10 @@ int main() {
 		cout << "Testing Noodle distance from tallest..." << endl;
 		
 		Noodle<int> testNood(39);
-		testNood._distFromTallest = 39;
+		testNood.setOrder(0);
 		
 		try {
-			if (testNood.getDistFromTallest() != 39) throw runtime_error("Values are not equal when they should be!");
+			if (testNood.getOrder() != 0) throw runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -231,13 +231,13 @@ int main() {
 		NoodleBox<int> testBox = {10};
 		
 		try {
-			if (testBox.getNoodleAt(0).getDistFromTallest() != 0) throw runtime_error("Values are not equal when they should be!");
+			if (testBox.getNoodleAt(0).getOrder() != 0) throw runtime_error("Values are not equal when they should be!");
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
 			cout << "Critical Noodle distance Failure!!" << endl;
 			cout << "(";
-			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ",";
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getOrder() << ",";
 			cout << ")" << endl;
 			return 1;
 		}
@@ -256,14 +256,14 @@ int main() {
 		
 		try {
 			for (unsigned int i=0; i<noodles.size(); i++) {
-				if (noodmax[i] != testBox.getNoodleAt(i).getDistFromTallest()) throw runtime_error("Values are not equal when they should be!");
+				if (noodmax[i] != testBox.getNoodleAt(i).getOrder()) throw runtime_error("Values are not equal when they should be!");
 			}
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
 			cout << "Critical Noodle distance Failure!!" << endl;
 			cout << "(";
-			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ","; 
+			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getOrder() << ","; 
 			cout << ")" << endl;
 			cout << "(";
 			for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i] << ","; 
@@ -405,7 +405,7 @@ int main() {
 		cout << endl << "Start: ";
 		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i] << ", ";
 		cout << endl << "Dist: ";
-		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest() << ", ";
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getOrder() << ", ";
 		cout << endl;
 		
 		std::sort(vecNood.begin(), vecNood.end());
@@ -443,7 +443,7 @@ int main() {
 		cout << endl << "Start: ";
 		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox[i];
 		cout << endl << "Dist: ";
-		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getDistFromTallest();
+		for (unsigned int i=0; i<testBox.size(); i++) cout << testBox.getNoodleAt(i).getOrder();
 		cout << endl;
 		
 		std::sort(vecNood.begin(), vecNood.end());

@@ -21,25 +21,34 @@ namespace spaghet {
 	}
 	
 	template <class T>
-	struct Noodle {
-		T _val;
-		unsigned int _distFromTallest;
-		
-		Noodle():_val(0), _distFromTallest(-1) {};
-		
-		// Calculate new noodle distance from the tallest
-		// This will be done in the box and updated accordingly
-		Noodle(const T & val):_val(val), _distFromTallest(-1) {}
-		
-		Noodle(T && val):_val(std::move(val)), _distFromTallest(-1) {}
-		
-		T getVal() const {
-			return _val;
-		}
-		
-		unsigned int getDistFromTallest() const {
-			return _distFromTallest;
-		}
+	class Noodle {
+		public:
+			Noodle():_val(0), _order(-1) {};
+			
+			// Calculate new noodle distance from the tallest
+			// This will be done in the box and updated accordingly
+			Noodle(const T & val):_val(val), _order(-1) {}
+			
+			Noodle(T && val):_val(std::move(val)), _order(-1) {}
+			
+			T getVal() const {
+				return _val;
+			}
+			
+			unsigned int getOrder() const {
+				return _order;
+			}
+			
+			void setVal(const T & val) {
+				_val = val;
+			}
+			
+			void setOrder(const unsigned int & val) {
+				_order = val;
+			}
+		private:
+			T _val;
+			unsigned int _order;
 	};
 	
 	template <class T>
@@ -48,6 +57,7 @@ namespace spaghet {
 			NoodleBox():_noodleVec(), _idxOfTallest(0) {};
 			
 			NoodleBox(const std::initializer_list<T> & list):_idxOfTallest(0) {
+				//_noodleVec.resize(std::distance(list.begin(), list.end()));
 				for (auto i : list) {
 					insertNoodle(Noodle<T>(i));
 				}
@@ -113,12 +123,6 @@ namespace spaghet {
 				return _idxOfTallest;
 			}
 			
-			//void setTallest();
-			
-			/* void setIdxOfTallest(int idxOfTallest) {
-				_idxOfTallest = idxOfTallest;
-			} */
-			
 			// allow insert by a value instead of a raw noodle?
 			
 			std::size_t size() const {
@@ -129,28 +133,28 @@ namespace spaghet {
 				_noodleVec.push_back(noodle);
 				
 				for (unsigned int i=0; i<_noodleVec.size(); i++) {
-					if (_noodleVec[size()-1]._val > _noodleVec[i]._val) {
-						_noodleVec[i]._distFromTallest = _noodleVec[i]._distFromTallest+1;
+					if (_noodleVec[size()-1].getVal() > _noodleVec[i].getVal()) {
+						_noodleVec[i].setOrder(_noodleVec[i].getOrder()+1);
 					}
 					else {
-						_noodleVec[size()-1]._distFromTallest = _noodleVec[size()-1]._distFromTallest+1;
+						_noodleVec[size()-1].setOrder(_noodleVec[size()-1].getOrder()+1);
 					}
 				}
-				if (_noodleVec[size()-1]._val > _noodleVec[_idxOfTallest]._val) _idxOfTallest = size()-1;
+				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
 			void insertNoodle(Noodle<T> && noodle) {
 				_noodleVec.push_back(std::move(noodle));
 				
 				for (unsigned int i=0; i<_noodleVec.size(); i++) {
-					if (_noodleVec[size()-1]._val > _noodleVec[i]._val) {
-						_noodleVec[i]._distFromTallest = _noodleVec[i]._distFromTallest+1;
+					if (_noodleVec[size()-1].getVal() > _noodleVec[i].getVal()) {
+						_noodleVec[i].setOrder(_noodleVec[i].getOrder()+1);
 					}
 					else {
-						_noodleVec[size()-1]._distFromTallest = _noodleVec[size()-1]._distFromTallest+1;
+						_noodleVec[size()-1].setOrder(_noodleVec[size()-1].getOrder()+1);
 					}
 				}
-				if (_noodleVec[size()-1]._val > _noodleVec[_idxOfTallest]._val) _idxOfTallest = size()-1;
+				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
 			Noodle<T> getNoodleAt(const unsigned int & index) const {
@@ -158,7 +162,7 @@ namespace spaghet {
 			}
 			
 			T operator[](const unsigned int & index) const {
-				return _noodleVec[index]._val;
+				return _noodleVec[index].getVal();
 			}
 			
 			void removeNoodle(const unsigned int & noodleIdx) {
@@ -175,11 +179,7 @@ namespace spaghet {
 	
 	template <typename T>
 	void sort(NoodleBox<T> & b) {
-		std::vector<T> temp;
 		
-		for (unsigned int i=0; i<b.size(); i++) {
-			temp.push_back(b[b.getIdxOfTallest()]);
-		}
 	}
 	
 	template <typename RAIter>
