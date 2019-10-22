@@ -54,8 +54,10 @@ namespace spaghet {
 	template <class T>
 	class NoodleBox {
 		public:
+			// Default Ctor
 			NoodleBox():_noodleVec(), _idxOfTallest(0) {};
 			
+			// Ctor from initializer_list
 			NoodleBox(const std::initializer_list<T> & list):_idxOfTallest(0) {
 				//_noodleVec.resize(std::distance(list.begin(), list.end()));
 				for (auto i : list) {
@@ -63,56 +65,67 @@ namespace spaghet {
 				}
 			}
 			
+			// Ctor from iterators
 			template <typename Iter>
 			NoodleBox(Iter first, Iter last):_idxOfTallest(0) {
-				for (auto f=first; f!=last; f++)
+				for (auto f=first; f!=last; f++) {
 					insertNoodle(Noodle<T>(*f));
+				}
 			}
 			
-			template <template <typename> class AT>
-			NoodleBox(const AT<T> & list):_idxOfTallest(0) {
-				*this = list;
-			}
-			
-			template <template <typename> class AT>
-			NoodleBox(AT<T> && list):_idxOfTallest(0) {
-				*this = std::move(list);
-			}
-			
-			template <template <typename> class AT>
-			void operator=(const AT<T> & list) {
+			// Ctor from container by const reference
+			template <template <typename> class Container>
+			NoodleBox(const Container<T> & list):_idxOfTallest(0) {
 				for (auto i=list.begin(); i!=list.end(); i++) {
 					insertNoodle(Noodle<T>(*i));
 				}
 			}
 			
-			template <template <typename> class AT>
-			void operator=(AT<T> && list) {
+			// Ctor from container by r-value reference
+			template <template <typename> class Container>
+			NoodleBox(Container<T> && list):_idxOfTallest(0) {
 				for (auto i=list.begin(); i!=list.end(); i++) {
 					insertNoodle(Noodle<T>(*i));
 				}
 			}
 			
+			// Assignment from container by const reference
+			template <template <typename> class Container>
+			NoodleBox<T> & operator=(const Container<T> & list) {
+				return *NoodleBox<T>(list);
+			}
+			
+			// Assignment from container by r-value reference
+			template <template <typename> class Container>
+			NoodleBox<T> & operator=(Container<T> && list) {
+				return *NoodleBox<T>(std::move(list));
+			}
+			
+			// Copy ctor
 			NoodleBox(const NoodleBox<T> & other):_idxOfTallest(other.getIdxOfTallest()) {
-				*this = other;
-			}
-			
-			NoodleBox(NoodleBox<T> && other):_idxOfTallest(std::move(other.getIdxOfTallest())) {
-				*this = std::move(other);
-			}
-			
-			void operator=(const NoodleBox<T> & other) {
 				for (std::size_t i=0; i<other.size(); i++) {
 					insertNoodle(other[i]);
 				}
 			}
 			
-			void operator=(NoodleBox<T> && other) {
-				for (auto i=0; i<other.size(); i++) {
+			// Move ctor
+			NoodleBox(NoodleBox<T> && other):_idxOfTallest(std::move(other.getIdxOfTallest())) {
+				for (std::size_t i=0; i<other.size(); i++) {
 					insertNoodle(other[i]);
 				}
 			}
 			
+			// Copy assignment
+			NoodleBox<T> & operator=(const NoodleBox<T> & other) {
+				return *NoodleBox<T>(other);
+			}
+			
+			// Move assignment
+			NoodleBox<T> & operator=(NoodleBox<T> && other) {
+				return *NoodleBox<T>(std::move(other));
+			}
+			
+			// Dtor
 			~NoodleBox()=default;
 			
 			Noodle<T> getTallest() const {
@@ -122,8 +135,6 @@ namespace spaghet {
 			unsigned int getIdxOfTallest() const {
 				return _idxOfTallest;
 			}
-			
-			// allow insert by a value instead of a raw noodle?
 			
 			std::size_t size() const {
 				return _noodleVec.size();
@@ -157,6 +168,8 @@ namespace spaghet {
 				if (_noodleVec[size()-1].getVal() > _noodleVec[_idxOfTallest].getVal()) _idxOfTallest = size()-1;
 			}
 			
+			// allow insert by a value instead of a raw noodle?
+			
 			Noodle<T> getNoodleAt(const unsigned int & index) const {
 				return _noodleVec[index];
 			}
@@ -173,7 +186,7 @@ namespace spaghet {
 			//std::vector<std::unique_ptr<Noodle>> _noodleVec; taking references to noodles instead of noodle
 			//objects as an optimization. But would we want to have a box of noodles that only contain the
 			//locations of noodles instead of actual noodles themselves? sounds unappetizing to me...
-			std::vector<Noodle<T>> _noodleVec;
+			std::vector<Noodle<T> > _noodleVec;
 			unsigned int _idxOfTallest;
 	};
 	

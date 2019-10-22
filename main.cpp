@@ -130,7 +130,7 @@ int main() {
 		NoodleBox<int> testBox;
 		
 		try {
-			testBox.insertNoodle(Noodle(39));
+			testBox.insertNoodle(Noodle<int>(39));
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
@@ -187,7 +187,7 @@ int main() {
 		cout << "Testing the lookup of a Noodle in a Box, but with rvalues..." << endl;
 		
 		NoodleBox<int> testBox;
-		testBox.insertNoodle(Noodle(39));
+		testBox.insertNoodle(Noodle<int>(39));
 		
 		try {
 			if (testBox.getNoodleAt(0).getVal() != 39) throw runtime_error("Values are not equal when they should be!");
@@ -343,7 +343,7 @@ int main() {
 		deque<long> vecNood = {-9, -8, -7, -6, -5, -4, -3, -2, -1, 0};
 		
 		try {
-			NoodleBox<long> testBox(vecNood);
+			//NoodleBox<long> testBox(vecNood);
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
