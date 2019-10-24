@@ -51,11 +51,9 @@ namespace spaghet {
 	
 	template <typename Iter>
 	void sort(Iter first, Iter last) {
-		std::vector<Noodle<typename std::iterator_traits<Iter>::value_type>> temp;
 		auto it = first;
 		auto size = std::distance(first, last);
-		unsigned int maxIdx = 0;
-		unsigned int max = 0;
+		std::vector<Noodle<typename std::iterator_traits<Iter>::value_type>> temp;
 		
 		// Naive insertion and max tracking
 		// O(n*lg(n))
@@ -69,29 +67,19 @@ namespace spaghet {
 				else 
 					temp[temp.size()-1].setOrder(temp[temp.size()-1].getOrder()+1);
 			}
-			
-			if (temp[i].getVal() > temp[maxIdx].getVal()) maxIdx = size-1;
 		}
 		
 		// Debug output
-		std::cout << "Dist: ";
+		/* std::cout << "Dist: ";
 		for (auto i : temp) std::cout << i.getOrder();
 		std::cout << std::endl << "Val: ";
 		for (auto i : temp) std::cout << i.getVal();
-		std::cout << std::endl << "Max idx: " << maxIdx << std::endl;
+		std::cout << std::endl << "Max idx: " << maxIdx << std::endl; */
 		
-		// The Very Naive Sort
-		// O(n*lg(n))...
-		do {
-			*--last = temp[maxIdx].getVal();
-			max++;
-			for (unsigned int i=0; i<size; i++) {
-				if (temp[i].getOrder() == max) {
-					maxIdx = i;
-					break;
-				}
-			}
-		} while (first != last);
+		// The Sort
+		// O(n)
+		for (unsigned int i=0; i<size; i++) 
+			*(last-temp[i].getOrder()-1) = temp[i].getVal();
 	}
 }
 
