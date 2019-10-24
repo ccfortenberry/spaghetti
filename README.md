@@ -7,4 +7,4 @@ A lot of people say that this is just a joke sort that isn't reasonably implemen
 + Stable: yes
 
 ## Todo
-- Fix construction/insertion duplicating data instead of overwriting
+- Get max tracking down to linear time
