@@ -1,7 +1,7 @@
 /***********************************
 * Curtis Fortenberry
 * Spaghetti Sort
-* main.cpp last rev. 2019-16-10
+* main.cpp last rev. 2019-24-10
 ***********************************/
 #include "spaghet.hpp"
 using spaghet::Noodle;
@@ -93,13 +93,19 @@ int main() {
 		vector<char> charvec(chararr.begin(), chararr.end());
 		
 		cout << "Start: ";
-		for (auto i : chararr) cout << i;
+		for (auto i : chararr) cout << i << ", ";
 		cout << endl << "Start: ";
-		for (unsigned int i=0; i<charvec.size(); i++) cout << charvec[i];
+		for (auto i : charvec) cout << i << ", ";
 		cout << endl;
 		
 		std::sort(chararr.begin(), chararr.end());
 		spaghet::sort(charvec.begin(), charvec.end());
+		
+		cout << "Desired: ";
+		for (auto i : chararr) cout << i << ", ";
+		cout << endl << "Result: ";
+		for (auto i : charvec) cout << i << ", ";
+		cout << endl;
 		
 		try {
 			for(unsigned int i=0; i<charvec.size(); i++) {
@@ -108,19 +114,83 @@ int main() {
 		}
 		catch (const exception & e) {
 			cout << e.what() << endl;
-			cout << "Desired: ";
-			for (auto i : chararr) cout << i;
-			cout << endl << "Result: ";
-			for (unsigned int i=0; i<charvec.size(); i++) cout << charvec[i];
-			cout << endl;
-			
+			return 1;
+		}
+		
+		cout << "SORTED" << endl;
+	}
+		
+	cout << endl;
+		
+	{
+		cout << "Testing sort..." << endl;
+		
+		array<int,10> negarr = {0, -1, -2, -3, -4, -5, -6, -7, -8, -9};
+		vector<int> negvec(negarr.begin(), negarr.end());
+		
+		cout << "Start: ";
+		for (auto i : negarr) cout << i << ", ";
+		cout << endl << "Start: ";
+		for (auto i : negvec) cout << i << ", ";
+		cout << endl;
+		
+		std::sort(negarr.begin(), negarr.end());
+		spaghet::sort(negvec.begin(), negvec.end());
+		
+		cout << "Desired: ";
+		for (auto i : negarr) cout << i << ", ";
+		cout << endl << "Result: ";
+		for (auto i : negvec) cout << i << ", ";
+		cout << endl;
+		
+		try {
+			for(unsigned int i=0; i<negvec.size(); i++) {
+				if (negarr[i] != negvec[i]) throw runtime_error("sorting Failure!!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
 			return 1;
 		}
 		
 		cout << "SORTED" << endl;
 	}
 	
-	// Test copy and move ctors
+	cout << endl;
+		
+	{
+		cout << "Testing sort..." << endl;
+		
+		deque<float> floatdq = {10.2, 16.55, 22.22, 6.4, 39.0, 87.1, 87.2, 16.5, -59.4};
+		vector<float> floatvec(floatdq.begin(), floatdq.end());
+		
+		cout << "Start: ";
+		for (auto i : floatdq) cout << i << ", ";
+		cout << endl << "Start: ";
+		for (auto i : floatvec) cout << i << ", ";
+		cout << endl;
+		
+		std::sort(floatdq.begin(), floatdq.end());
+		spaghet::sort(floatvec.begin(), floatvec.end());
+		
+		cout << "Desired: ";
+		for (auto i : floatdq) cout << i << ", ";
+		cout << endl << "Result: ";
+		for (auto i : floatvec) cout << i << ", ";
+		cout << endl;
+		
+		try {
+			for(unsigned int i=0; i<floatvec.size(); i++) {
+				if (floatdq[i] != floatvec[i]) throw runtime_error("sorting Failure!!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			return 1;
+		}
+		
+		cout << "SORTED" << endl;
+	}
 	
 	cout << endl;
 	
