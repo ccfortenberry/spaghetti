@@ -6,25 +6,17 @@
 #ifndef SPAGHET_INCLUDED // Somebody toucha my spaghet!
 #define SPAGHET_INCLUDED
 
-#include <iostream> // To be removed whenever
+#include <iostream>
 #include <algorithm>
 #include <iterator>
-#include <vector> // May need to take away this so it can
-                  // have its own functionality, someday
+#include <vector>
 
 namespace spaghet {
-	// printmeme \\
-	// DESC: prints a meme to make sure i know how namespaces work
-	// IN: none
-	// OUT: none
-	// SE: prints a dead meme to the console
-	void printmeme() {
-		std::cout << "Somebody toucha my spaghet!" << std::endl;
-	}
-	
-	// Noodle class \\
-	// DESC: really just so i have one less header to include (ie. pair)
-	// CONSTRAINTS: T should be an ordinal type
+	/**************************************************************************
+	* -- Noodle class --
+	* DESC: really just so i have one less header to include (ie. pair)
+	* CONSTRAINTS: T should be an ordinal type
+	**************************************************************************/
 	template <class T>
 	class Noodle {
 		public:
@@ -54,11 +46,14 @@ namespace spaghet {
 			unsigned int _order;
 	};
 	
-	// sort \\
-	// DESC: the sorting algorithm, based on Spaghetti Sort
-	// IN: iterators to the begin() and end() of a given container
-	// OUT: none
-	// SE: sorts the given range and loads it back to the given container using its iterators
+	/**************************************************************************
+	* -- sort --
+	* DESC: the sorting algorithm, based on Spaghetti Sort
+	* IN: iterators to the begin() and end() of a given container
+	* OUT: none
+	* SE: sorts the given range and loads it back to the given container using 
+	* its iterators
+	**************************************************************************/
 	template <typename Iter>
 	void sort(Iter first, Iter last) {
 		// Initialization of temporaries needed to make the alg work

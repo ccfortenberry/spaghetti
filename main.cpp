@@ -24,11 +24,7 @@ using std::runtime_error;
 // for std::sort;
 
 int main() {
-	{
-		cout << "Begin lemon testing to ensure basic functionality:\n_____________________________________" << endl;
-		cout << "Testing namespace as the lemon-est lemon test" << endl;
-		spaghet::printmeme();
-	}
+	cout << "Begin lemon testing to ensure basic functionality:\n_____________________________________" << endl;
 	
 	cout << endl;
 	
