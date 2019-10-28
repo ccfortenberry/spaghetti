@@ -22,6 +22,8 @@ using std::exception;
 using std::runtime_error;
 #include <algorithm>
 // for std::sort;
+#include <chrono>
+// for std::chrono;
 
 int main() {
 	cout << "Begin lemon testing to ensure basic functionality:\n_____________________________________" << endl;
@@ -264,5 +266,40 @@ int main() {
 	
 	cout << "_____________________________________\nAll tests passed!" << endl;
 	
+	cout << endl;
+	
+	{
+		cout << "Comparing time to std::sort..." << endl;
+		
+		unsigned int size = 100000;
+		
+		vector<int> v1(size);
+		generate(v1.begin(), v1.end(), []() { return rand()%100000; });
+		vector<int> v2(v1);
+		vector<int> v3(v1);
+		
+		auto start = std::chrono::high_resolution_clock::now();
+		std::sort(v1.begin(), v1.end());
+		auto stop = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> dur = stop - start;
+		cout << "std::sort took: " << dur.count() << "s" << endl;
+		
+		start = std::chrono::high_resolution_clock::now();
+		spaghet::sort(v2.begin(), v2.end());
+		stop = std::chrono::high_resolution_clock::now();
+		dur = stop - start;
+		cout << "unstable spaghetti sort took: " << dur.count() << "s" << endl;
+		
+		start = std::chrono::high_resolution_clock::now();
+		spaghet::sort_stable(v3.begin(), v3.end());
+		stop = std::chrono::high_resolution_clock::now();
+		dur = stop - start;
+		cout << "stable spaghetti sort took: " << dur.count() << "s" << endl;
+		
+	}
+	
+	cout << endl;
+	
+	cout << "Testing complete!" << endl;
 	return 0;
 }
