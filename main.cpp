@@ -190,6 +190,42 @@ int main() {
 	
 	cout << endl;
 	
+	{
+		cout << "Testing sort for stability..." << endl;
+		
+		vector<int> vecOf39(10, 39);
+		vector<int> copyVec(vecOf39.begin(), vecOf39.end());
+		
+		cout << "Start: ";
+		for (auto i : vecOf39) cout << i << ", ";
+		cout << endl << "Start: ";
+		for (auto i : copyVec) cout << i << ", ";
+		cout << endl;
+		
+		std::sort(vecOf39.begin(), vecOf39.end());
+		spaghet::sort(copyVec.begin(), copyVec.end());
+		
+		cout << "Desired: ";
+		for (auto i : vecOf39) cout << i << ", ";
+		cout << endl << "Result: ";
+		for (auto i : copyVec) cout << i << ", ";
+		cout << endl;
+		
+		try {
+			for(unsigned int i=0; i<copyVec.size(); i++) {
+				if (vecOf39[i] != copyVec[i]) throw runtime_error("sorting Failure!!");
+			}
+		}
+		catch (const exception & e) {
+			cout << e.what() << endl;
+			return 1;
+		}
+		
+		cout << "SORTED, but the sort is UNSTABLE as the first value encountered for a repeated value will be sent to the back of its sequence" << endl;
+	}
+	
+	cout << endl;
+	
 	cout << "_____________________________________\nAll tests passed!" << endl;
 	
 	return 0;
