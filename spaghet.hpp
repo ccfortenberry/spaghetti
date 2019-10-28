@@ -90,6 +90,47 @@ namespace spaghet {
 		for (unsigned int i=0; i<size; i++) 
 			*(last-temp[i].getOrder()-1) = temp[i].getVal();
 	}
+	
+	/**************************************************************************
+	* -- stable sort --
+	* DESC: same as above, but stable
+	**************************************************************************/
+	template <typename Iter>
+	void sort_stable(Iter first, Iter last) {
+		// Initialization of temporaries needed to make the alg work
+		// This makes the sort not in-place, with linear complexity
+		auto it = first;
+		auto size = std::distance(first, last);
+		using T = typename std::iterator_traits<Iter>::value_type;
+		std::vector<Noodle<T>> temp;
+		temp.reserve(size);
+		
+		// Insertion and max tracking
+		// Time: O(n*lg(n))
+		for (unsigned int i=0; i<size; i++) {
+			temp.push_back(*it++);
+			auto width = temp.size();
+			
+			for (unsigned int j=0; j<width; j++) {
+				if (temp[temp.size()-1].getVal() >= temp[j].getVal()) 
+					temp[j].setOrder(temp[j].getOrder()+1);
+				else 
+					temp[temp.size()-1].setOrder(temp[temp.size()-1].getOrder()+1);
+			}
+		}
+		
+		// Debug output
+		std::cout << "Dist: ";
+		for (auto i : temp) std::cout << i.getOrder() << ", ";
+		std::cout << std::endl << "Val: ";
+		for (auto i : temp) std::cout << i.getVal() << ", ";
+		std::cout << std::endl;
+		
+		// The Sort
+		// Time: O(n)
+		for (unsigned int i=0; i<size; i++) 
+			*(last-temp[i].getOrder()-1) = temp[i].getVal();
+	}
 }
 
 #endif //SPAGHET_INCLUDED
