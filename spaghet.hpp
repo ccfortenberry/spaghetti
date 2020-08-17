@@ -56,7 +56,7 @@ namespace spaghet {
 		std::vector<Noodle<typename std::iterator_traits<Iter>::value_type>> temp;
 		
 		// Naive insertion and max tracking
-		// O(n*lg(n))
+		// O(n^2)
 		for (unsigned int i=0; i<size; i++) {
 			temp.push_back(*it++);
 			auto width = temp.size();
