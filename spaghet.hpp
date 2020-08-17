@@ -1,25 +1,22 @@
 /***********************************
 * Curtis Fortenberry
 * Spaghetti Sort
-* spaghet.hpp last rev. 2019-16-10
+* spaghet.hpp last rev. 2019-24-10
 ***********************************/
 #ifndef SPAGHET_INCLUDED // Somebody toucha my spaghet!
 #define SPAGHET_INCLUDED
 
-#include <iostream> // To be removed whenever
+#include <iostream>
 #include <algorithm>
-#include <cstddef>
-#include <initializer_list>
 #include <iterator>
-#include <memory>
-#include <vector> // May need to take away this so it can
-                  // have its own functionality, someday
+#include <vector>
 
 namespace spaghet {
-	void printmeme() {
-		std::cout << "Somebody toucha my spaghet!" << std::endl;
-	}
-	
+	/**************************************************************************
+	* -- Noodle class --
+	* DESC: really just so i have one less header to include (ie. pair)
+	* CONSTRAINTS: T should be an ordinal type
+	**************************************************************************/
 	template <class T>
 	class Noodle {
 		public:
@@ -49,11 +46,64 @@ namespace spaghet {
 			unsigned int _order;
 	};
 	
+	/**************************************************************************
+	* -- sort --
+	* DESC: the sorting algorithm, based on Spaghetti Sort
+	* IN: iterators to the begin() and end() of a given container
+	* OUT: none
+	* SE: sorts the given range and loads it back to the given container using 
+	* its iterators
+	**************************************************************************/
 	template <typename Iter>
 	void sort(Iter first, Iter last) {
+		// Initialization of temporaries needed to make the alg work
+		// This makes the sort not in-place, with linear complexity
 		auto it = first;
 		auto size = std::distance(first, last);
-		std::vector<Noodle<typename std::iterator_traits<Iter>::value_type>> temp;
+		using T = typename std::iterator_traits<Iter>::value_type;
+		std::vector<Noodle<T>> temp;
+		temp.reserve(size);
+		
+		// Insertion and max tracking
+		// Time: O(n^2)
+		for (unsigned int i=0; i<size; i++) {
+			temp.push_back(*it++);
+			auto width = temp.size();
+			
+			for (unsigned int j=0; j<width; j++) {
+				if (temp[width-1].getVal() > temp[j].getVal()) 
+					temp[j].setOrder(temp[j].getOrder()+1);
+				else 
+					temp[width-1].setOrder(temp[width-1].getOrder()+1);
+			}
+		}
+		
+		// Debug output
+		/* std::cout << "Dist: ";
+		for (auto i : temp) std::cout << i.getOrder() << ", ";
+		std::cout << std::endl << "Val: ";
+		for (auto i : temp) std::cout << i.getVal() << ", ";
+		std::cout << std::endl; */
+		
+		// The Sort
+		// Time: O(n)
+		for (unsigned int i=0; i<size; i++) 
+			*(last-temp[i].getOrder()-1) = temp[i].getVal();
+	}
+	
+	/**************************************************************************
+	* -- stable sort --
+	* DESC: same as above, but stable
+	**************************************************************************/
+	template <typename Iter>
+	void sort_stable(Iter first, Iter last) {
+		// Initialization of temporaries needed to make the alg work
+		// This makes the sort not in-place, with linear complexity
+		auto it = first;
+		auto size = std::distance(first, last);
+		using T = typename std::iterator_traits<Iter>::value_type;
+		std::vector<Noodle<T>> temp;
+		temp.reserve(size);
 		
 		// Naive insertion and max tracking
 		// O(n^2)
@@ -62,22 +112,22 @@ namespace spaghet {
 			auto width = temp.size();
 			
 			for (unsigned int j=0; j<width; j++) {
-				if (temp[temp.size()-1].getVal() > temp[j].getVal()) 
+				if (temp[width-1].getVal() >= temp[j].getVal()) 
 					temp[j].setOrder(temp[j].getOrder()+1);
 				else 
-					temp[temp.size()-1].setOrder(temp[temp.size()-1].getOrder()+1);
+					temp[width-1].setOrder(temp[width-1].getOrder()+1);
 			}
 		}
 		
 		// Debug output
 		/* std::cout << "Dist: ";
-		for (auto i : temp) std::cout << i.getOrder();
+		for (auto i : temp) std::cout << i.getOrder() << ", ";
 		std::cout << std::endl << "Val: ";
-		for (auto i : temp) std::cout << i.getVal();
-		std::cout << std::endl << "Max idx: " << maxIdx << std::endl; */
+		for (auto i : temp) std::cout << i.getVal() << ", ";
+		std::cout << std::endl; */
 		
 		// The Sort
-		// O(n)
+		// Time: O(n)
 		for (unsigned int i=0; i<size; i++) 
 			*(last-temp[i].getOrder()-1) = temp[i].getVal();
 	}
